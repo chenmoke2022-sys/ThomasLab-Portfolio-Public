@@ -28,15 +28,15 @@
 interface AuditTrace {
   // 基础标识
   trace_id: string;              // 请求唯一标识（可跨系统追踪）
-  timestamp: string;              // ISO 8601 格式时间戳
+  timestamp: string;              // 时间戳（格式约定由系统统一）
   
   // 路由决策
-  route_decision: string;         // 路由结果：system_0_fast | system_05_resonance | system_1_deep | fallback
-  confidence: number;             // 置信度（0.0-1.0）
+  route_decision: string;         // 路由结果：fast_path | resonance_path | deep_path | fallback
+  confidence: number;             // 置信度（零到一之间的浮点数）
   reason: string;                 // 路由原因：whitelist_match | resonance_hit | unknown_fallback
   
   // 预算与风险
-  budget_consumed: number;        // 本次消耗的预算比例（0.0-1.0）
+  budget_consumed: number;        // 本次消耗的预算比例（零到一之间的浮点数）
   risk_level: string;             // 风险等级：low | medium | high
   
   // 回滚与安全
@@ -55,51 +55,51 @@ interface AuditTrace {
 
 ## 三、示例 trace（假数据）| Example Traces
 
-### 示例 1：快路径（白名单命中）
+### 示例 A：快路径（白名单命中）
 ```json
 {
-  "trace_id": "req_20251231_001",
-  "timestamp": "2025-12-31T10:00:00Z",
-  "route_decision": "system_0_fast",
-  "confidence": 0.95,
+  "trace_id": "req_xxx",
+  "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
+  "route_decision": "fast_path",
+  "confidence": "<float>",
   "reason": "whitelist_match",
-  "budget_consumed": 0.01,
+  "budget_consumed": "<float>",
   "risk_level": "low",
-  "rollback_safe": true,
-  "fallback_triggered": false,
-  "confirmation_required": false
+  "rollback_safe": "<bool>",
+  "fallback_triggered": "<bool>",
+  "confirmation_required": "<bool>"
 }
 ```
 
-### 示例 2：共振命中（中等置信）
+### 示例 B：共振命中（中等置信）
 ```json
 {
-  "trace_id": "req_20251231_002",
-  "timestamp": "2025-12-31T10:01:00Z",
-  "route_decision": "system_05_resonance",
-  "confidence": 0.78,
+  "trace_id": "req_xxx",
+  "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
+  "route_decision": "resonance_path",
+  "confidence": "<float>",
   "reason": "resonance_hit",
-  "budget_consumed": 0.05,
+  "budget_consumed": "<float>",
   "risk_level": "medium",
-  "rollback_safe": true,
-  "fallback_triggered": false,
-  "confirmation_required": false
+  "rollback_safe": "<bool>",
+  "fallback_triggered": "<bool>",
+  "confirmation_required": "<bool>"
 }
 ```
 
-### 示例 3：回退到深推理（低置信 + 高风险）
+### 示例 C：回退到深推理（低置信 + 高风险）
 ```json
 {
-  "trace_id": "req_20251231_003",
-  "timestamp": "2025-12-31T10:02:00Z",
+  "trace_id": "req_xxx",
+  "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
   "route_decision": "fallback",
-  "confidence": 0.42,
+  "confidence": "<float>",
   "reason": "low_confidence_high_risk",
-  "budget_consumed": 0.20,
+  "budget_consumed": "<float>",
   "risk_level": "high",
-  "rollback_safe": true,
-  "fallback_triggered": true,
-  "confirmation_required": true
+  "rollback_safe": "<bool>",
+  "fallback_triggered": "<bool>",
+  "confirmation_required": "<bool>"
 }
 ```
 
@@ -117,17 +117,15 @@ function validateTrace(trace: AuditTrace): ValidationResult {
   if (!trace.trace_id) errors.push("missing trace_id");
   if (!trace.route_decision) errors.push("missing route_decision");
   
-  // 类型校验
-  if (typeof trace.confidence !== 'number' || trace.confidence < 0 || trace.confidence > 1) {
-    errors.push("invalid confidence range");
-  }
+  // 类型校验（示意）
+  // confidence / budget_consumed 为数值，且在约定范围内
   
   // 逻辑一致性
   if (trace.risk_level === 'high' && !trace.confirmation_required) {
     errors.push("high risk must require confirmation");
   }
   
-  return { valid: errors.length === 0, errors };
+  return { valid: !errors.length, errors };
 }
 ```
 
@@ -138,7 +136,7 @@ function validateTrace(trace: AuditTrace): ValidationResult {
 ### PoC 阶段的 trace 验收标准
 - **字段完整性**：必选字段保持**全覆盖**（门槛在 PoC 冻结）
 - **trace 覆盖率**：关键路由决策保持**高覆盖**（门槛在 PoC 冻结）
-- **可追责测试**：给定 trace_id，能在 5 秒内定位完整决策链
+- **可追责测试**：给定 trace_id，能在约定时间窗内定位完整决策链
 - **回滚演练**：给定失败条件，能按 trace 触发精准回滚
 
 ### 交付物清单
@@ -152,14 +150,14 @@ function validateTrace(trace: AuditTrace): ValidationResult {
 ## 六、完整 trace 在哪里？| Where Is the Full Trace?
 
 完整 trace（含真实数据、业务上下文、可复刻配置）在**私有证据包**，可在以下场景提供：
-- 30 分钟技术评审（屏幕共享演示）
+- 线上技术评审（屏幕共享演示）
 - 付费 PoC 启动后（按保密协议交付）
 
 ---
 
 ## 📞 如何评审
 
-请邮件说明你们的链路与想优化的指标，我会安排 30 分钟线上评审，屏幕共享完整证据包。
+请邮件说明你们的链路与想优化的指标，我会安排线上评审，屏幕共享完整证据包。
 
 Email: chenmoke2022@gmail.com
 
