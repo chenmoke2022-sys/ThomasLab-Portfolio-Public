@@ -46,7 +46,7 @@
 ### 如何复核
 技术评审时可演示共振门控命令行工具 + 对比图（示意/公开版不含精确刻度）。
 
-![量子隧穿延迟对比](assets/quantum_tunneling_latency.png)
+![快慢路径延迟差距（示意图）](assets/latency_gap_schematic.png)
 
 ---
 

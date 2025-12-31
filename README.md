@@ -94,9 +94,9 @@
 
 ![大规模图压测（示意图）](assets/stress_test_graph.png)
 
-**量子语义隧穿**：Barrier（模型推理/确认）显著慢于 Tunneling（门控命中）
+**意图直达（门控命中）**：慢路径（模型推理/确认）显著慢于快路径（门控命中）
 
-![量子隧穿延迟](assets/quantum_tunneling_latency.png)
+![快慢路径延迟差距（示意图）](assets/latency_gap_schematic.png)
 
 更多案例见：[CASE_STUDIES.md](CASE_STUDIES.md)
 
