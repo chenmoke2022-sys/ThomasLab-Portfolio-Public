@@ -1,0 +1,30 @@
+# 防止误提交私有内容 | Prevent Accidental Commit of Private Content
+
+# 私有证据包
+**/evidence_private/
+**/full_traces/
+**/raw_data/
+
+# 配置与参数
+**/config_production.json
+**/thresholds_*.json
+**/*_private.md
+
+# 临时文件
+*.log
+*.tmp
+*.cache
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 敏感信息
+**/*_confidential*
+**/*_internal*
+**/NDA_*
+

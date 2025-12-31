@@ -1,0 +1,26 @@
+Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+
+Copyright 2025 Thomas Tan (陈铭)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---
+
+## Notice
+
+本仓库为脱敏版对外作品集，仅包含方法论、审计框架、验收方式等公开内容。
+
+核心实现细节、参数、可复刻配置、完整证据链在私有仓库，可在技术评审或签署保密协议后提供。
+
