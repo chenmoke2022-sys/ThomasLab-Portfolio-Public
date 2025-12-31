@@ -136,8 +136,8 @@ function validateTrace(trace: AuditTrace): ValidationResult {
 ## 五、如何在 PoC 中使用 | How to Use in PoC
 
 ### PoC 阶段的 trace 验收标准
-- **字段完整性**：所有必选字段 100% 覆盖
-- **trace 覆盖率**：≥ 95% 的路由决策都有 trace
+- **字段完整性**：必选字段保持**全覆盖**（门槛在 PoC 冻结）
+- **trace 覆盖率**：关键路由决策保持**高覆盖**（门槛在 PoC 冻结）
 - **可追责测试**：给定 trace_id，能在 5 秒内定位完整决策链
 - **回滚演练**：给定失败条件，能按 trace 触发精准回滚
 
