@@ -31,9 +31,9 @@ interface AuditTrace {
   timestamp: string;              // 时间戳（格式约定由系统统一）
   
   // 路由决策
-  route_decision: string;         // 路由结果：fast_path | resonance_path | deep_path | fallback
+  route_decision: string;         // 路由结果：fast_path | gated_path | deep_path | fallback
   confidence: number;             // 置信度（零到一之间的浮点数）
-  reason: string;                 // 路由原因：whitelist_match | resonance_hit | unknown_fallback
+  reason: string;                 // 路由原因：whitelist_match | gated_match | unknown_fallback
   
   // 预算与风险
   budget_consumed: number;        // 本次消耗的预算比例（零到一之间的浮点数）
@@ -76,9 +76,9 @@ interface AuditTrace {
 {
   "trace_id": "req_xxx",
   "timestamp": "YYYY-MM-DDTHH:MM:SSZ",
-  "route_decision": "resonance_path",
+  "route_decision": "gated_path",
   "confidence": "<float>",
-  "reason": "resonance_hit",
+  "reason": "gated_match",
   "budget_consumed": "<float>",
   "risk_level": "medium",
   "rollback_safe": "<bool>",
